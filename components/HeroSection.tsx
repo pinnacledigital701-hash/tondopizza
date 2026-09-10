@@ -13,9 +13,10 @@ export function HeroSection({ onOpenReserve }: HeroSectionProps) {
       id="home"
       className="relative pt-32 pb-16 md:pt-40 md:pb-24 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
         {/* LEFT COLUMN: HEADLINE & COPY */}
-        <div className="lg:col-span-7 space-y-6 text-left z-10">
+        <div className="lg:col-span-6 space-y-6 text-left z-10">
           <div className="space-y-0 select-none">
             <h1 className="font-display text-6xl sm:text-8xl xl:text-9xl tracking-tight text-[#181514] uppercase leading-[0.88]">
               BIG.<br />
@@ -61,24 +62,26 @@ export function HeroSection({ onOpenReserve }: HeroSectionProps) {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: PREMIUM HIGH-END PHOTOGRAPHY MATRIX */}
-        <div className="lg:col-span-5 relative flex justify-center items-center select-none py-6 lg:pl-6">
-          {/* Soft premium ambient warm background glow */}
-          <div className="absolute w-72 h-72 sm:w-96 sm:h-96 bg-[#E5381B]/10 rounded-full blur-3xl pointer-events-none -z-10" />
+                {/* RIGHT COLUMN: MASSIVE ULTRA-EXPANDED PREMIUM PIZZA ACCENT */}
+        <div className="lg:col-span-6 relative flex justify-center items-center select-none py-6 lg:pl-6">
+          {/* Expanded deep radial glow backing to support the massive photography bounds */}
+          <div className="absolute w-96 h-96 lg:w-[600px] lg:h-[600px] bg-[#E5381B]/12 rounded-full blur-[120px] pointer-events-none -z-10" />
 
           {/* 
-            SCALED UP RECTANGLE ENVELOPE: 
-            Increased mobile dimension from max-w-[420px] to max-w-[460px].
-            Increased desktop bounding grid from default to max-w-[560px].
+            ULTRA-MAXIMUM BOUNDING GRID:
+            Wiped out the old 420px limits. 
+            Cranked mobile parameters up to 480px and desktop bounds to an absolute 840px threshold envelope.
+            Slapped a `lg:scale-110` matrix anchor to forcefully blow up the picture scale.
           */}
-          <div className="relative w-full max-w-[460px] sm:max-w-[560px] aspect-square animate-float-pizza flex items-center justify-center">
+          <div className="w-full max-w-[480px] lg:max-w-[760px] xl:max-w-[840px] aspect-square relative animate-float-pizza flex items-center justify-center lg:scale-110">
             <img 
               src="/hero-pizza.png" 
-              alt="Bjorbun Woodfired Pizza Masterpiece" 
-              className="w-full h-full object-contain drop-shadow-[0_30px_60px_rgba(24,21,20,0.35)] transition-transform duration-300 hover:scale-[1.03]"
+              alt="Bjorbun Pizzeria Luxury Hero Showcase Asset" 
+              className="w-full h-full object-contain drop-shadow-[0_45px_85px_rgba(24,21,20,0.38)] transition-transform duration-500 hover:scale-[1.03]" 
             />
           </div>
         </div>
+
       </div>
     </section>
   );
