@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: var(--font-display-anton), 'Anton', 'Bebas Neue', Impact, system-ui, sans-serif;
+    --font-body: var(--font-body-jakarta), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+  
+  body {
+    font-family: var(--font-body);
+    background-color: #F7F4EE;
+    color: #181514;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display-anton), 'Anton', 'Bebas Neue', Impact, -apple-system, sans-serif;
+  letter-spacing: -0.015em;
+  line-height: 0.92;
+}
+
+.font-bebas {
+  font-family: var(--font-display-bebas), 'Bebas Neue', 'Anton', Impact, sans-serif;
+  letter-spacing: 0.03em;
+}
+
+@keyframes marqueeSlow {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee-slow {
+  display: flex;
+  width: max-content;
+  animation: marqueeSlow 30s linear infinite;
+}
+
+.animate-marquee-slow:hover {
+  animation-play-state: paused;
+}
+
+@keyframes floatGentle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+.animate-float-pizza {
+  animation: floatGentle 6s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+/* Custom scrollbar hiding */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

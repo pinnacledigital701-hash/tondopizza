@@ -1,0 +1,6 @@
+{
+  "name": "Tondo Pizza Co. • Woodfired Neapolitan Pizza",
+  "description": "Artisanal woodfired Neapolitan pizza featuring 48-hour fermented dough, San Marzano tomatoes, and 450°C wood oven craft.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
