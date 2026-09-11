@@ -22,14 +22,19 @@ export function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pb-16 border-b border-white/10">
           {/* LEFT: BRAND & NEWSLETTER */}
           <div className="lg:col-span-6 space-y-6">
-            <a href="#home" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center relative overflow-hidden bg-transparent group-hover:border-[#FDB827] transition-colors">
-                <div className="w-4 h-4 rounded-full border border-dashed border-white group-hover:border-[#FDB827] flex items-center justify-center">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#E5381B]" />
-                </div>
-              </div>
+            <a href="#home" className="flex items-center gap-3.5 group select-none">
+              {/* 
+                DYNAMIC FOOTER LOGO INTEGRATION:
+                Wiped out the hardcoded double-nested placeholder circles.
+                Dropped a clean image element linked to your root public asset directory.
+              */}
+              <img 
+                src="/tondologo.png" 
+                alt="Tondo Pizza Brand Signature Emblem Logo" 
+                className="h-[76px] w-auto object-contain transition-transform duration-200 group-hover:scale-105 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.05)]" 
+              />
               <span className="font-display text-2xl tracking-tighter text-white font-black">
-                TONDO
+                
               </span>
             </a>
 
@@ -50,7 +55,7 @@ export function Footer() {
                 />
                 <button
                   type="submit"
-                  className="px-6 py-3 bg-[#FDB827] text-[#181514] font-display text-xs font-black tracking-wider uppercase rounded-full hover:bg-[#e2a21e] active:scale-95 transition-all shadow-xs"
+                  className="px-6 py-3 bg-[#FDB827] text-[#181514] font-display text-xs font-black tracking-wider uppercase rounded-full hover:bg-[#e2a21e] active:scale-95 transition-all shadow-xs cursor-pointer"
                 >
                   JOIN
                 </button>
@@ -133,7 +138,7 @@ export function Footer() {
         {/* BOTTOM COPYRIGHT */}
         <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-white/50 font-medium">
           <p>© 2026 Tondo Pizza Co. All pies reserved.</p>
-          <p>Made with flour, fire & far too much mozzarella.</p>
+          <p>Made by Pinnacle Digital Studios.</p>
         </div>
       </div>
     </footer>
