@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Plus, Check, Sparkles } from 'lucide-react';
-import { SIGNATURE_PIZZAS, MenuItem } from '@/lib/data';
+import { SIGNATURE_PIZZAS, MenuItem } from '@/lib/restaurantData';
 
 interface SignatureSectionProps {
   onAddToCart: (item: MenuItem) => void;
@@ -40,8 +40,8 @@ export function SignatureSection({ onAddToCart }: SignatureSectionProps) {
         </h2>
       </div>
 
-      {/* 3 SIGNATURE PIZZA CARDS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-8 max-w-6xl mx-auto">
+      {/* SIGNATURE CARDS */}
+      <div className={`grid grid-cols-1 ${SIGNATURE_PIZZAS.length >= 4 ? 'sm:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'} gap-6 lg:gap-8 max-w-7xl mx-auto`}>
         {SIGNATURE_PIZZAS.map((pizza) => {
           const isAdded = addedId === pizza.id;
 
@@ -51,6 +51,10 @@ export function SignatureSection({ onAddToCart }: SignatureSectionProps) {
               ? 'bg-[#157C41] text-white'
               : pizza.badgeType === 'black'
               ? 'bg-[#181514] text-white'
+              : pizza.badgeType === 'yellow'
+              ? 'bg-[#D97706] text-white'
+              : pizza.badgeType === 'brown'
+              ? 'bg-[#78350F] text-white'
               : 'bg-[#E5381B] text-white';
 
           return (

@@ -5,14 +5,16 @@ export interface MenuItem {
   description: string;
   price: number;
   badge?: string;
-  badgeType?: 'red' | 'green' | 'black' | 'yellow';
-  category: 'rosse' | 'bianche' | 'sides' | 'dolci';
+  badgeType?: 'red' | 'green' | 'black' | 'yellow' | 'brown';
+  category: 'rosse' | 'bianche' | 'sides' | 'dolci' | 'burgers' | string;
   image?: string;
   ingredients?: string[];
   isSignature?: boolean;
 }
 
-export const SIGNATURE_PIZZAS: MenuItem[] = [
+export type BurgerItem = MenuItem;
+
+export const ALL_MENU_ITEMS: MenuItem[] = [
   {
     id: 'margherita',
     name: 'MARGHERITA',
@@ -59,14 +61,18 @@ export const SIGNATURE_PIZZAS: MenuItem[] = [
     badge: 'THE MONSTER',
     badgeType: 'red',
     description: 'Built for intense hunger. Crispy brick-oven sourdough crust piled high with seasoned house-made juicy beef meatballs.',
-    price:  20, 
+    price: 20,
     category: 'burgers',
     image: '/bbq-meatball.png',
     ingredients: ['Smashed Beef Meatballs', 'Applewood Bacon Ribbons', 'Melted Smoked Gouda', 'Bourbon BBQ Glaze'],
     isSignature: true,
   },
-
 ];
+
+export const SIGNATURE_BURGERS: BurgerItem[] = ALL_MENU_ITEMS.filter((item) => item.category === 'burgers');
+
+export const SIGNATURE_PIZZAS: MenuItem[] = ALL_MENU_ITEMS.filter((item) => item.isSignature);
+
 
 export const MENU_CATEGORIES = [
   {
