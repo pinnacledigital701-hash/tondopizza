@@ -11,7 +11,7 @@ export function OurStorySection() {
         <div className="lg:col-span-6 relative">
           <div className="relative w-full aspect-[4/5] sm:aspect-square max-w-lg mx-auto rounded-[36px] overflow-hidden border-2 border-[#181514]/10 shadow-lg group">
             <Image
-              src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1000&auto=format&fit=crop"
+              src="/storeinside.png"
               alt="Artisanal Neapolitan Pizza Dough Making"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -60,7 +60,7 @@ export function OurStorySection() {
           <div className="pt-6 border-t border-[#181514]/15 flex items-center gap-4">
             <div className="w-14 h-14 rounded-full overflow-hidden relative border-2 border-[#181514]/20 shrink-0">
               <Image
-                src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?q=80&w=300&auto=format&fit=crop"
+                src="/ameliasanders.png"
                 alt="Marco Tonelli - Head Pizzaiolo"
                 fill
                 sizes="64px"
@@ -70,7 +70,7 @@ export function OurStorySection() {
             </div>
             <div>
               <h4 className="font-display text-lg font-black tracking-wide text-[#181514] uppercase">
-                MARCO TONELLI
+                AMELIA SANDERS
               </h4>
               <p className="text-xs font-semibold text-[#181514]/60 tracking-wider">
                 Founder & head pizzaiolo
