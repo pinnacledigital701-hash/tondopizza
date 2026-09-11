@@ -14,6 +14,7 @@ import { ReviewsSection } from '@/components/ReviewsSection';
 import { VisitAndReserveSection } from '@/components/VisitAndReserveSection';
 import { Footer } from '@/components/Footer';
 import { OrderDrawer, CartItem } from '@/components/OrderDrawer';
+import { Preloader } from '@/components/Preloader'; // <-- MOUNTED NEW IMPORT ROUTE LINK SINK
 import { MenuItem } from '@/lib/data';
 
 export default function Home() {
@@ -37,7 +38,7 @@ export default function Home() {
   const handleUpdateQuantity = (id: string, delta: number) => {
     setCartItems((prev) =>
       prev
-        .map((ci) => {
+         .map((ci) => {
           if (ci.item.id === id) {
             const newQty = ci.quantity + delta;
             return newQty > 0 ? { ...ci, quantity: newQty } : null;
@@ -64,7 +65,10 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#F7F4EE] text-[#181514] selection:bg-[#E5381B] selection:text-white relative">
+    <main className="min-h-screen text-[#181514] selection:bg-[#E5381B] selection:text-white relative">
+      {/* 0. CINEMATIC PORTAL SCAN PRELOADER ENGINE */}
+      <Preloader minDurationMs={2800} />
+
       {/* 1. TOP NAVIGATION */}
       <Navbar
         cartCount={totalCartCount}
