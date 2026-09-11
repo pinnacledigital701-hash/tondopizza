@@ -58,12 +58,12 @@ export const SIGNATURE_PIZZAS: MenuItem[] = [
     tagline: 'Juicy smashed garlic meatballs, smoky bacon strips, sweet bourbon BBQ swirl',
     badge: 'THE MONSTER',
     badgeType: 'brown',
-    description: 'Built for intense hunger. Crispy brick-oven sourdough crust piled high with seasoned house-made juicy beef meatballs captured mid-melt under a blanket of smoked gouda cheese, finished with crispy applewood bacon ribbons and a heavy downpour of sticky, sweet bourbon BBQ glaze.',
-    price: 20,
+    description: 'Built for intense hunger. Crispy brick-oven sourdough crust piled high with seasoned house-made juicy beef meatballs.',
+    price:  20, 
     category: 'burgers',
     image: '/bbq-meatball.png',
     ingredients: ['Smashed Beef Meatballs', 'Applewood Bacon Ribbons', 'Melted Smoked Gouda', 'Bourbon BBQ Glaze'],
-    isSignature: false,
+    isSignature: true,
   },
 
 ];
