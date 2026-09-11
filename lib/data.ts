@@ -57,7 +57,7 @@ export const SIGNATURE_PIZZAS: MenuItem[] = [
     name: 'BBQ MEATBALL MONSTER',
     tagline: 'Juicy smashed garlic meatballs, smoky bacon strips, sweet bourbon BBQ swirl',
     badge: 'THE MONSTER',
-    badgeType: 'brown',
+    badgeType: 'red',
     description: 'Built for intense hunger. Crispy brick-oven sourdough crust piled high with seasoned house-made juicy beef meatballs.',
     price:  20, 
     category: 'burgers',
