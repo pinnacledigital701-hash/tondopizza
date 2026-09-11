@@ -25,27 +25,22 @@ export function Navbar({ cartCount, onOpenCart, onOpenReserve }: NavbarProps) {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-[#F7F4EE]/90 backdrop-blur-md shadow-xs border-b border-[#181514]/10 py-3.5'
+          ? 'bg-[#F7F4EE]/90 backdrop-blur-md shadow-xs border-b border-[#181514]/10 py-3.5 md:py-4'
           : 'bg-[#F7F4EE]/80 backdrop-blur-xs py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-        {/* LOGO */}
+        {/* LOGO FRAME INTERFACE LINK */}
         <a
           href="#home"
-          className="flex items-center gap-2 group transition-transform duration-200 active:scale-95"
+          className="flex items-center gap-3.5 group relative select-none"
           id="brand-logo"
         >
-          {/* Tondo circular icon */}
-          <div className="w-8 h-8 rounded-full border-2 border-[#181514] flex items-center justify-center relative overflow-hidden bg-transparent group-hover:border-[#E5381B] transition-colors">
-            <div className="w-4 h-4 rounded-full border border-dashed border-[#181514] group-hover:border-[#E5381B] flex items-center justify-center">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#E5381B]" />
-            </div>
-            <span className="sr-only">Tondo</span>
-          </div>
-          <span className="font-display text-2xl tracking-tighter text-[#181514] font-black">
-            TONDO
-          </span>
+          <img 
+            src="/tondologo.png" 
+            alt="Tondo Pizza Bold Retro Emblem Logo" 
+            className="h-[86px] sm:h-[98px] w-auto object-contain transition-transform duration-200 group-hover:scale-105 drop-shadow-[0_6px_16px_rgba(24,21,20,0.15)] -my-4 relative z-10"
+          />
         </a>
 
         {/* DESKTOP NAV LINKS */}

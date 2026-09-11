@@ -6,9 +6,9 @@
     --font-body: var(--font-body-jakarta), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
   
-  body {
+   body {
     font-family: var(--font-body);
-    background-color: #F7F4EE;
+    background-color: #E2725B; /* <-- UPDATED TO WARM TERRACOTTA ORANGE */
     color: #181514;
   }
 }
