@@ -26,7 +26,7 @@ export function OurStorySection() {
               <span className="bg-[#181514]/70 backdrop-blur-xs px-4 py-1.5 rounded-full border border-white/20">
                 Crafted In Eastside
               </span>
-              <span className="text-white/80">Est. 2014</span>
+              <span className="text-white/80">Est. 2024</span>
             </div>
           </div>
         </div>
@@ -46,7 +46,7 @@ export function OurStorySection() {
 
           <div className="space-y-4 text-[#181514]/80 text-base sm:text-lg font-medium leading-relaxed">
             <p>
-              Tondo started as a single wood oven in a converted garage. We had one rule:
+              Tondo Pizza started as a single wood oven in a converted garage. We had one rule:
               do one thing, and refuse to do it badly. A decade later that rule hasn’t changed
               — just the line out the door.
             </p>

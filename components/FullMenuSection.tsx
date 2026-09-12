@@ -27,7 +27,7 @@ export function FullMenuSection({ onAddToCart }: FullMenuSectionProps) {
 
   return (
     <section id="menu" className="py-20 md:py-28 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto">
-      <div className="bg-[#157C41] text-white rounded-[36px] sm:rounded-[48px] p-8 sm:p-12 md:p-16 shadow-xl relative overflow-hidden">
+      <div className="bg-[#2D5A27] text-white rounded-[36px] sm:rounded-[48px] p-8 sm:p-12 md:p-16 shadow-xl relative overflow-hidden">
         {/* Subtle decorative background watermark */}
         <div className="absolute -right-16 -bottom-16 w-96 h-96 rounded-full border-[30px] border-white/5 pointer-events-none" />
 
@@ -122,8 +122,8 @@ export function FullMenuSection({ onAddToCart }: FullMenuSectionProps) {
         <div className="mt-14 pt-6 border-t border-white/15 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#A6E3B8]">
           <p>Dough made with organic Italian wheat. Gluten-friendly options available upon request.</p>
           <div className="flex gap-4 uppercase font-bold tracking-wider text-[11px]">
-            <span>🌱 Vegetarian Options</span>
-            <span>🔥 Woodfired 450°C</span>
+            <span> Vegetarian Options</span>
+            <span> Woodfired 450°C</span>
           </div>
         </div>
       </div>

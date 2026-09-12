@@ -1,9 +1,31 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Star } from 'lucide-react';
 import { REVIEWS } from '@/lib/data';
+
+function ReviewAvatar({ src, alt }: { src: string; alt: string }) {
+  const fallbackSrc =
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop';
+  const [imgSrc, setImgSrc] = useState(src);
+
+  return (
+    <Image
+      src={imgSrc || fallbackSrc}
+      alt={alt}
+      fill
+      sizes="44px"
+      className="object-cover"
+      referrerPolicy="no-referrer"
+      onError={() => {
+        if (imgSrc !== fallbackSrc) {
+          setImgSrc(fallbackSrc);
+        }
+      }}
+    />
+  );
+}
 
 export function ReviewsSection() {
   return (
@@ -47,14 +69,7 @@ export function ReviewsSection() {
               {/* Author footer */}
               <div className="flex items-center gap-3 pt-6 border-t border-[#181514]/10">
                 <div className="w-11 h-11 rounded-full overflow-hidden relative border border-[#181514]/20 shrink-0">
-                  <Image
-                    src={review.avatar}
-                    alt={review.author}
-                    fill
-                    sizes="44px"
-                    className="object-cover"
-                    referrerPolicy="no-referrer"
-                  />
+                  <ReviewAvatar src={review.avatar} alt={review.author} />
                 </div>
                 <div>
                   <h4 className="font-display text-base font-black text-[#181514] uppercase">

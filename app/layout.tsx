@@ -25,6 +25,13 @@ const plusJakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: 'Tondo Pizza Co. • Woodfired Neapolitan Pizza',
   description: 'Artisanal woodfired Neapolitan pizza featuring 48-hour fermented dough, San Marzano tomatoes, and 450°C wood oven craft.',
+  icons: {
+    icon: [
+      { url: '/tondologo.png', type: 'image/png' },
+    ],
+    shortcut: '/tondologo.png',
+    apple: '/tondologo.png',
+  },
   openGraph: {
     title: 'Tondo Pizza Co. • Woodfired Neapolitan Pizza',
     description: 'Artisanal woodfired Neapolitan pizza featuring 48-hour fermented dough, San Marzano tomatoes, and 450°C wood oven craft.',
