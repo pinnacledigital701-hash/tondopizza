@@ -117,6 +117,12 @@ export default function Home() {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onClearCart={handleClearCart}
+        onAddToCart={handleAddToCart}
+        onBrowseMenu={() => {
+          setIsCartOpen(false);
+          const el = document.getElementById('signature') || document.getElementById('menu');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        }}
       />
     </main>
   );
