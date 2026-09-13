@@ -1,32 +1,73 @@
 'use client';
 
-import React, { useState } from 'react';
-import { CheckCircle2, Calendar, Users, Clock, MapPin, Phone, Mail } from 'lucide-react';
+import React, { useState, useSyncExternalStore } from 'react';
+import { CheckCircle2, Calendar, Users, Clock, MapPin, Phone, Mail, AlertCircle } from 'lucide-react';
+import { ownerStore, ReservationRecord } from '@/lib/ownerStore';
 
 interface VisitAndReserveSectionProps {
   initialOpen?: boolean;
 }
 
+function generateReservationDetails(): { id: string; bookingCode: string } {
+  const randomSuffix = String(Math.floor(1000 + Math.random() * 9000));
+  return {
+    id: `res-${Date.now()}`,
+    bookingCode: `RES-${randomSuffix}`,
+  };
+}
+
 export function VisitAndReserveSection({ initialOpen }: VisitAndReserveSectionProps) {
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [guests, setGuests] = useState('2');
   const [dateTime, setDateTime] = useState('');
   const [email, setEmail] = useState('');
   const [isReserved, setIsReserved] = useState(false);
   const [bookingCode, setBookingCode] = useState('');
 
+  const reservationsEnabled = useSyncExternalStore(
+    ownerStore.subscribe.bind(ownerStore),
+    () => {
+      const s = ownerStore.getSettings();
+      return s.reservationAcceptingEnabled ?? true;
+    },
+    () => true
+  );
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
 
-    const randomCode = 'TND-' + Math.floor(1000 + Math.random() * 9000);
-    setBookingCode(randomCode);
+    const details = generateReservationDetails();
+    setBookingCode(details.bookingCode);
+
+    // Save to ownerStore
+    const todayStr = new Date().toISOString().split('T')[0];
+    const newReservation: ReservationRecord = {
+      id: details.id,
+      bookingCode: details.bookingCode,
+      customer: {
+        name: name.trim(),
+        phone: phone.trim() || '(555) 012-3456',
+        email: email.trim() || undefined,
+      },
+      guests: parseInt(guests) || 2,
+      date: todayStr,
+      time: dateTime.trim() || '19:30',
+      status: 'NEW',
+      specialRequests: dateTime.trim() ? `Requested slot: ${dateTime}` : undefined,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    ownerStore.addReservation(newReservation);
     setIsReserved(true);
   };
 
   const handleReset = () => {
     setIsReserved(false);
     setName('');
+    setPhone('');
     setEmail('');
     setDateTime('');
   };
@@ -107,19 +148,35 @@ export function VisitAndReserveSection({ initialOpen }: VisitAndReserveSectionPr
                     />
                   </div>
 
-                  {/* Optional Email */}
-                  <div>
-                    <label className="sr-only" htmlFor="res-email">
-                      Email address
-                    </label>
-                    <input
-                      id="res-email"
-                      type="email"
-                      placeholder="Email (for confirmation)"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-5 py-3.5 rounded-2xl border-2 border-[#181514]/20 focus:border-[#E5381B] focus:outline-hidden font-medium text-sm text-[#181514] placeholder-[#181514]/40 transition-colors"
-                    />
+                  {/* Email & Phone */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="sr-only" htmlFor="res-email">
+                        Email address
+                      </label>
+                      <input
+                        id="res-email"
+                        type="email"
+                        placeholder="Email address"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full px-4 py-3.5 rounded-2xl border-2 border-[#181514]/20 focus:border-[#E5381B] focus:outline-hidden font-medium text-sm text-[#181514] placeholder-[#181514]/40 transition-colors"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="sr-only" htmlFor="res-phone">
+                        Phone number
+                      </label>
+                      <input
+                        id="res-phone"
+                        type="tel"
+                        placeholder="Phone (for SMS)"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full px-4 py-3.5 rounded-2xl border-2 border-[#181514]/20 focus:border-[#E5381B] focus:outline-hidden font-medium text-sm text-[#181514] placeholder-[#181514]/40 transition-colors"
+                      />
+                    </div>
                   </div>
 
                   {/* Guests & Date/Time split */}

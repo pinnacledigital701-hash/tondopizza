@@ -1,0 +1,258 @@
+{
+  "entities": {
+    "Order": {
+      "title": "Order",
+      "description": "An online pizza order for pickup, dine-in, or delivery.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the order record."
+        },
+        "orderNumber": {
+          "type": "string",
+          "description": "Order reference code like #TND-4921."
+        },
+        "customer": {
+          "type": "object",
+          "description": "Customer contact details including name, phone, email, and optional delivery address."
+        },
+        "orderType": {
+          "type": "string",
+          "enum": ["pickup", "dinein", "delivery"],
+          "description": "Fulfillment method."
+        },
+        "items": {
+          "type": "array",
+          "description": "Array of ordered pizza or drink items."
+        },
+        "subtotal": {
+          "type": "number",
+          "description": "Order subtotal before taxes."
+        },
+        "tax": {
+          "type": "number",
+          "description": "Taxes calculated."
+        },
+        "fees": {
+          "type": "number",
+          "description": "Packaging or delivery fees."
+        },
+        "total": {
+          "type": "number",
+          "description": "Final billed total in USD."
+        },
+        "paymentStatus": {
+          "type": "string",
+          "enum": ["PAID", "PENDING", "REFUNDED"],
+          "description": "Payment transaction status."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["NEW", "CONFIRMED", "PREPARING", "READY", "COMPLETED", "CANCELLED"],
+          "description": "Current kitchen execution status."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Guest special preparation instructions."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation ISO date timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update ISO date timestamp."
+        }
+      },
+      "required": ["id", "orderNumber", "customer", "orderType", "items", "subtotal", "total", "status", "createdAt"]
+    },
+    "Reservation": {
+      "title": "Reservation",
+      "description": "A table reservation request at Tondo Pizza Co.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique reservation identifier."
+        },
+        "bookingCode": {
+          "type": "string",
+          "description": "Booking confirmation code like RES-4921."
+        },
+        "customer": {
+          "type": "object",
+          "description": "Customer name, phone, and optional email."
+        },
+        "guests": {
+          "type": "number",
+          "description": "Number of dining party guests."
+        },
+        "date": {
+          "type": "string",
+          "description": "Dining date in YYYY-MM-DD format."
+        },
+        "time": {
+          "type": "string",
+          "description": "Dining time slot in HH:MM format."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["NEW", "CONFIRMED", "SEATED", "COMPLETED", "CANCELLED", "NO SHOW"],
+          "description": "Table reservation lifecycle status."
+        },
+        "specialRequests": {
+          "type": "string",
+          "description": "Special dietary or seating preferences."
+        },
+        "internalNotes": {
+          "type": "string",
+          "description": "Staff internal table assignment notes."
+        },
+        "tableNumber": {
+          "type": "string",
+          "description": "Allocated dining table number."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Reservation creation ISO timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Reservation update ISO timestamp."
+        }
+      },
+      "required": ["id", "bookingCode", "customer", "guests", "date", "time", "status", "createdAt"]
+    },
+    "MenuItem": {
+      "title": "MenuItem",
+      "description": "A catalog menu item offering from the wood-fired kitchen.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique menu item ID."
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of pizza or dish."
+        },
+        "category": {
+          "type": "string",
+          "description": "Category such as classic, signature, or dessert."
+        },
+        "price": {
+          "type": "number",
+          "description": "Item price in USD."
+        },
+        "description": {
+          "type": "string",
+          "description": "Culinary description and ingredients."
+        },
+        "isAvailable": {
+          "type": "boolean",
+          "description": "Whether item is currently active on the menu."
+        },
+        "is86d": {
+          "type": "boolean",
+          "description": "Whether item is temporarily 86'd (out of stock)."
+        },
+        "isPopular": {
+          "type": "boolean",
+          "description": "Chef recommendation highlight."
+        },
+        "vegetarian": {
+          "type": "boolean",
+          "description": "Vegetarian dietary flag."
+        },
+        "spicy": {
+          "type": "boolean",
+          "description": "Spicy dietary flag."
+        },
+        "glutenFreeOption": {
+          "type": "boolean",
+          "description": "Whether gluten-free crust option is available."
+        },
+        "orderCount": {
+          "type": "number",
+          "description": "Total order tally count."
+        }
+      },
+      "required": ["id", "name", "category", "price", "description", "isAvailable", "is86d"]
+    },
+    "RestaurantSettings": {
+      "title": "RestaurantSettings",
+      "description": "Restaurant operational toggles and service configurations.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Settings identifier, typically 'general'."
+        },
+        "restaurantName": {
+          "type": "string",
+          "description": "Official restaurant name."
+        },
+        "tagline": {
+          "type": "string",
+          "description": "Brand slogan or subtitle."
+        },
+        "address": {
+          "type": "string",
+          "description": "Physical restaurant address."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Primary telephone number."
+        },
+        "email": {
+          "type": "string",
+          "description": "Public contact email address."
+        },
+        "orderAcceptingEnabled": {
+          "type": "boolean",
+          "description": "Online orders toggle switch."
+        },
+        "reservationAcceptingEnabled": {
+          "type": "boolean",
+          "description": "Online reservations toggle switch."
+        },
+        "pickupEstimatedMinutes": {
+          "type": "number",
+          "description": "Estimated pickup wait time in minutes."
+        },
+        "deliveryEstimatedMinutes": {
+          "type": "number",
+          "description": "Estimated delivery wait time in minutes."
+        },
+        "ovenTemp": {
+          "type": "string",
+          "description": "Wood-fired oven deck temperature."
+        },
+        "openingHours": {
+          "type": "object",
+          "description": "Weekly operating schedule."
+        }
+      },
+      "required": ["id", "restaurantName", "orderAcceptingEnabled", "reservationAcceptingEnabled", "pickupEstimatedMinutes", "deliveryEstimatedMinutes", "ovenTemp"]
+    }
+  },
+  "firestore": {
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Live and completed pizza orders."
+    },
+    "/reservations/{reservationId}": {
+      "schema": "Reservation",
+      "description": "Guest dining table bookings."
+    },
+    "/menuItems/{menuItemId}": {
+      "schema": "MenuItem",
+      "description": "Managed menu catalog and stock/86 statuses."
+    },
+    "/settings/{settingId}": {
+      "schema": "RestaurantSettings",
+      "description": "Operational settings and kitchen parameters."
+    }
+  }
+}

@@ -1,0 +1,123 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Hardened Helper Primitives
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email == 'pinnacledigital701@gmail.com' && request.auth.token.email_verified == true) ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Entity Validation Helpers
+    function isValidOrder(data) {
+      return data.keys().hasAll(['id', 'orderNumber', 'customer', 'orderType', 'items', 'subtotal', 'total', 'status', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.orderNumber is string && data.orderNumber.size() <= 32 &&
+        data.customer is map &&
+        data.customer.name is string && data.customer.name.size() > 0 && data.customer.name.size() <= 120 &&
+        data.customer.phone is string && data.customer.phone.size() > 0 && data.customer.phone.size() <= 40 &&
+        data.orderType in ['pickup', 'dinein', 'delivery'] &&
+        data.items is list && data.items.size() > 0 && data.items.size() <= 50 &&
+        data.subtotal is number && data.subtotal >= 0 &&
+        data.total is number && data.total >= 0 &&
+        data.status in ['NEW', 'CONFIRMED', 'PREPARING', 'READY', 'COMPLETED', 'CANCELLED'] &&
+        data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidReservation(data) {
+      return data.keys().hasAll(['id', 'bookingCode', 'customer', 'guests', 'date', 'time', 'status', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.bookingCode is string && data.bookingCode.size() <= 32 &&
+        data.customer is map &&
+        data.customer.name is string && data.customer.name.size() > 0 && data.customer.name.size() <= 120 &&
+        data.customer.phone is string && data.customer.phone.size() > 0 && data.customer.phone.size() <= 40 &&
+        data.guests is number && data.guests >= 1 && data.guests <= 30 &&
+        data.date is string && data.date.size() <= 20 &&
+        data.time is string && data.time.size() <= 20 &&
+        data.status in ['NEW', 'CONFIRMED', 'SEATED', 'COMPLETED', 'CANCELLED', 'NO SHOW'] &&
+        data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidMenuItem(data) {
+      return data.keys().hasAll(['id', 'name', 'category', 'price', 'description', 'isAvailable', 'is86d']) &&
+        data.id is string && isValidId(data.id) &&
+        data.name is string && data.name.size() > 0 && data.name.size() <= 120 &&
+        data.category is string && data.category.size() <= 64 &&
+        data.price is number && data.price >= 0 &&
+        data.description is string && data.description.size() <= 500 &&
+        data.isAvailable is bool &&
+        data.is86d is bool;
+    }
+
+    function isValidSettings(data) {
+      return data.keys().hasAll(['id', 'restaurantName', 'orderAcceptingEnabled', 'reservationAcceptingEnabled', 'pickupEstimatedMinutes', 'deliveryEstimatedMinutes', 'ovenTemp']) &&
+        data.id is string && isValidId(data.id) &&
+        data.restaurantName is string && data.restaurantName.size() > 0 && data.restaurantName.size() <= 120 &&
+        data.orderAcceptingEnabled is bool &&
+        data.reservationAcceptingEnabled is bool &&
+        data.pickupEstimatedMinutes is number && data.pickupEstimatedMinutes >= 0 &&
+        data.deliveryEstimatedMinutes is number && data.deliveryEstimatedMinutes >= 0 &&
+        data.ovenTemp is string && data.ovenTemp.size() <= 32;
+    }
+
+    // Admins Collection
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Orders Collection
+    match /orders/{orderId} {
+      allow get: if isValidId(orderId) && (true);
+      allow list: if isAdmin();
+      allow create: if isValidId(orderId) && isValidOrder(incoming()) && incoming().status == 'NEW';
+      allow update: if isValidId(orderId) && isAdmin() && isValidOrder(incoming());
+      allow delete: if isValidId(orderId) && isAdmin();
+    }
+
+    // Reservations Collection
+    match /reservations/{reservationId} {
+      allow get: if isValidId(reservationId) && (true);
+      allow list: if isAdmin();
+      allow create: if isValidId(reservationId) && isValidReservation(incoming()) && incoming().status == 'NEW';
+      allow update: if isValidId(reservationId) && isAdmin() && isValidReservation(incoming());
+      allow delete: if isValidId(reservationId) && isAdmin();
+    }
+
+    // Menu Items Collection
+    match /menuItems/{menuItemId} {
+      allow get, list: if true;
+      allow create, update, delete: if isValidId(menuItemId) && isAdmin() && isValidMenuItem(incoming());
+    }
+
+    // Restaurant Settings Collection
+    match /settings/{settingId} {
+      allow get, list: if true;
+      allow create, update: if isValidId(settingId) && isAdmin() && isValidSettings(incoming());
+      allow delete: if false;
+    }
+  }
+}

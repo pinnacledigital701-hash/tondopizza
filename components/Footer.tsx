@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Check } from 'lucide-react';
+import Link from 'next/link';
+import { Check, Lock } from 'lucide-react';
 
 export function Footer() {
   const [email, setEmail] = useState('');
@@ -135,10 +136,20 @@ export function Footer() {
           </div>
         </div>
 
-        {/* BOTTOM COPYRIGHT */}
+        {/* BOTTOM COPYRIGHT & OWNER ACCESS */}
         <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-white/50 font-medium">
           <p>© 2026 Tondo Pizza Co. All pies reserved.</p>
-          <p>Made by Pinnacle Digital Studios.</p>
+          <div className="flex items-center gap-6">
+            <p>Made by Pinnacle Digital Studios.</p>
+            <Link
+              href="/owner"
+              className="flex items-center gap-1.5 text-white/30 hover:text-[#FDB827] font-mono text-[11px] uppercase tracking-wider transition-colors"
+              title="Restaurant Owner Management Console"
+            >
+              <Lock className="w-3 h-3" />
+              <span>OWNER ACCESS</span>
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

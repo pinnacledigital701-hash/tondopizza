@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
-import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight, CheckCircle2 } from 'lucide-react';
+import React, { useState, useSyncExternalStore } from 'react';
+import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight, CheckCircle2, User, Phone, AlertCircle } from 'lucide-react';
 import { MenuItem } from '@/lib/data';
+import { ownerStore, OrderRecord } from '@/lib/ownerStore';
 
 export interface CartItem {
   item: MenuItem;
@@ -19,6 +20,14 @@ interface OrderDrawerProps {
   onClearCart: () => void;
 }
 
+function generateNewOrderDetails(): { id: string; orderNumber: string } {
+  const randomSuffix = String(Math.floor(1000 + Math.random() * 9000));
+  return {
+    id: `ord-${Date.now()}`,
+    orderNumber: `#TND-${randomSuffix}`,
+  };
+}
+
 export function OrderDrawer({
   isOpen,
   onClose,
@@ -28,11 +37,17 @@ export function OrderDrawer({
   onClearCart,
 }: OrderDrawerProps) {
   const [orderType, setOrderType] = useState<'pickup' | 'dinein'>('pickup');
+  const [guestName, setGuestName] = useState('');
+  const [guestPhone, setGuestPhone] = useState('');
   const [specialInstructions, setSpecialInstructions] = useState('');
   const [isOrdered, setIsOrdered] = useState(false);
   const [orderNum, setOrderNum] = useState('');
 
-  if (!isOpen) return null;
+  const ordersOpen = useSyncExternalStore(
+    ownerStore.subscribe.bind(ownerStore),
+    () => ownerStore.getSettings().orderAcceptingEnabled,
+    () => true
+  );
 
   const subtotal = cartItems.reduce((acc, ci) => acc + ci.item.price * ci.quantity, 0);
   const tax = subtotal * 0.08875; // standard ~8.8%
@@ -40,16 +55,50 @@ export function OrderDrawer({
 
   const handleCheckout = (e: React.FormEvent) => {
     e.preventDefault();
-    const generated = 'TND-ORD-' + Math.floor(100 + Math.random() * 900);
-    setOrderNum(generated);
+    const details = generateNewOrderDetails();
+    setOrderNum(details.orderNumber);
+
+    // Save to ownerStore
+    const newRecord: OrderRecord = {
+      id: details.id,
+      orderNumber: details.orderNumber,
+      customer: {
+        name: guestName.trim() || 'Online Guest',
+        phone: guestPhone.trim() || '(555) 019-9021',
+      },
+      orderType,
+      items: cartItems.map((ci) => ({
+        id: ci.item.id,
+        name: ci.item.name,
+        price: ci.item.price,
+        quantity: ci.quantity,
+        notes: ci.notes,
+      })),
+      subtotal: Number(subtotal.toFixed(2)),
+      tax: Number(tax.toFixed(2)),
+      fees: 0,
+      total: Number(total.toFixed(2)),
+      paymentStatus: 'PAID',
+      status: 'NEW',
+      notes: specialInstructions.trim() || undefined,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    ownerStore.addOrder(newRecord);
     setIsOrdered(true);
   };
 
   const handleReset = () => {
     setIsOrdered(false);
+    setGuestName('');
+    setGuestPhone('');
+    setSpecialInstructions('');
     onClearCart();
     onClose();
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
@@ -171,22 +220,61 @@ export function OrderDrawer({
                       </div>
                     ))}
 
-                    {/* Special Instructions */}
-                    <div className="pt-2">
-                      <label
-                        htmlFor="order-instructions"
-                        className="text-xs font-bold uppercase tracking-wider text-[#181514]/60 block mb-1.5"
-                      >
-                        Order Notes (e.g. Chili honey on the side)
-                      </label>
-                      <textarea
-                        id="order-instructions"
-                        rows={2}
-                        value={specialInstructions}
-                        onChange={(e) => setSpecialInstructions(e.target.value)}
-                        placeholder="Any dietary preferences or packaging requests..."
-                        className="w-full px-4 py-2.5 rounded-xl border border-[#181514]/20 text-xs font-medium focus:outline-hidden focus:border-[#E5381B] transition-colors resize-none"
-                      />
+                    {/* Guest Contact Details */}
+                    <div className="pt-2 space-y-3">
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label
+                            htmlFor="drawer-guest-name"
+                            className="text-[10px] font-bold uppercase tracking-wider text-[#181514]/60 block mb-1"
+                          >
+                            Your Name
+                          </label>
+                          <input
+                            id="drawer-guest-name"
+                            type="text"
+                            placeholder="Guest Name"
+                            value={guestName}
+                            onChange={(e) => setGuestName(e.target.value)}
+                            className="w-full px-3 py-2 rounded-xl border border-[#181514]/20 text-xs font-medium focus:outline-hidden focus:border-[#E5381B]"
+                          />
+                        </div>
+
+                        <div>
+                          <label
+                            htmlFor="drawer-guest-phone"
+                            className="text-[10px] font-bold uppercase tracking-wider text-[#181514]/60 block mb-1"
+                          >
+                            Phone (For SMS)
+                          </label>
+                          <input
+                            id="drawer-guest-phone"
+                            type="tel"
+                            placeholder="(555) 000-0000"
+                            value={guestPhone}
+                            onChange={(e) => setGuestPhone(e.target.value)}
+                            className="w-full px-3 py-2 rounded-xl border border-[#181514]/20 text-xs font-medium focus:outline-hidden focus:border-[#E5381B]"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Special Instructions */}
+                      <div>
+                        <label
+                          htmlFor="order-instructions"
+                          className="text-[10px] font-bold uppercase tracking-wider text-[#181514]/60 block mb-1"
+                        >
+                          Order Notes (e.g. Chili honey on the side)
+                        </label>
+                        <textarea
+                          id="order-instructions"
+                          rows={2}
+                          value={specialInstructions}
+                          onChange={(e) => setSpecialInstructions(e.target.value)}
+                          placeholder="Any dietary preferences or packaging requests..."
+                          className="w-full px-3 py-2 rounded-xl border border-[#181514]/20 text-xs font-medium focus:outline-hidden focus:border-[#E5381B] transition-colors resize-none"
+                        />
+                      </div>
                     </div>
                   </div>
                 )}
@@ -259,14 +347,26 @@ export function OrderDrawer({
                 </div>
               </div>
 
-              <button
-                onClick={handleCheckout}
-                className="w-full py-4 bg-[#E5381B] text-white font-display text-base font-black uppercase tracking-wider rounded-full hover:bg-[#c92f15] active:scale-98 transition-all shadow-md flex items-center justify-center gap-2"
-                id="drawer-checkout-btn"
-              >
-                PLACE ORDER (${total.toFixed(2)})
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              {ordersOpen ? (
+                <button
+                  onClick={handleCheckout}
+                  className="w-full py-4 bg-[#E5381B] text-white font-display text-base font-black uppercase tracking-wider rounded-full hover:bg-[#c92f15] active:scale-98 transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                  id="drawer-checkout-btn"
+                >
+                  PLACE ORDER (${total.toFixed(2)})
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-2xl text-center space-y-1">
+                  <span className="font-mono text-xs font-bold text-red-700 uppercase flex items-center justify-center gap-1.5">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    KITCHEN PAUSED
+                  </span>
+                  <p className="text-[11px] text-[#181514]/70">
+                    Online ordering is paused during peak service. Call us directly!
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>
